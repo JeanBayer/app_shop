@@ -7,9 +7,15 @@ enum FilterOptions {
   all,
 }
 
-class ProductsOverviewScreen extends StatelessWidget {
+class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({Key? key}) : super(key: key);
 
+  @override
+  State<ProductsOverviewScreen> createState() => _ProductsOverviewScreenState();
+}
+
+class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
+  var _showOnlyFavorites = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +23,15 @@ class ProductsOverviewScreen extends StatelessWidget {
         actions: [
           PopupMenuButton(
             // ignore: avoid_print
-            onSelected: (FilterOptions value) => print(value),
+            onSelected: (FilterOptions value) {
+              setState(() {
+                if (FilterOptions.favorite == value) {
+                  _showOnlyFavorites = true;
+                } else {
+                  _showOnlyFavorites = false;
+                }
+              });
+            },
             icon: const Icon(Icons.more_vert),
             itemBuilder: (ctx) => [
               const PopupMenuItem(
@@ -32,7 +46,7 @@ class ProductsOverviewScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const ProductGrid(),
+      body: ProductGrid(showFavorites: _showOnlyFavorites),
     );
   }
 }
