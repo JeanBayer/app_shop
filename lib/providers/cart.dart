@@ -23,7 +23,7 @@ class Cart with ChangeNotifier {
   int get lengthItems {
     //option 1
     // return _items == null ? 0 : _items!.length;
-    
+
     //option 2
     var sumatoria = 0;
     _items?.forEach((key, value) {
@@ -32,12 +32,21 @@ class Cart with ChangeNotifier {
     return sumatoria;
   }
 
+  double get totalAmount {
+    var amount = 0.0;
+    _items?.forEach((key, carItem) {
+      amount += carItem.quantity * carItem.price;
+    });
+    return amount;
+  }
+
   void addItem(String productId, double price, String title) {
     if (_items!.containsKey(productId)) {
       _items!.update(
         productId,
         (existingCarItem) => CartItem(
-          id: existingCarItem.id,
+          id: 
+          .id,
           title: existingCarItem.title,
           quantity: existingCarItem.quantity + 1,
           price: existingCarItem.price,
