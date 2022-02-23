@@ -21,7 +21,15 @@ class Cart with ChangeNotifier {
   }
 
   int get lengthItems {
-    return _items == null ? 0 : _items!.length;
+    //option 1
+    // return _items == null ? 0 : _items!.length;
+    
+    //option 2
+    var sumatoria = 0;
+    _items?.forEach((key, value) {
+      sumatoria += value.quantity;
+    });
+    return sumatoria;
   }
 
   void addItem(String productId, double price, String title) {
