@@ -45,8 +45,7 @@ class Cart with ChangeNotifier {
       _items!.update(
         productId,
         (existingCarItem) => CartItem(
-          id: 
-          .id,
+          id: existingCarItem.id,
           title: existingCarItem.title,
           quantity: existingCarItem.quantity + 1,
           price: existingCarItem.price,
@@ -63,6 +62,11 @@ class Cart with ChangeNotifier {
         ),
       );
     }
+    notifyListeners();
+  }
+
+  void removeItem(String productId) {
+    _items!.remove(productId);
     notifyListeners();
   }
 }
