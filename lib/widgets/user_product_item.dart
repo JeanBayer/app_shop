@@ -15,6 +15,44 @@ class UserProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    showDialogDelete(BuildContext context, ScaffoldMessengerState scaffoldMessenger) async {
+      showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: const Text('Removing items!'),
+            content: const Text('Do you realy want to remove this item?'),
+            actions: [
+              TextButton(
+                child: const Text('No'),
+                onPressed: () {
+                  Navigator.of(ctx).pop(false);
+                },
+              ),
+              TextButton(
+                child: const Text('Yes'),
+                onPressed: () async {
+                  try {
+                    await Provider.of<Products>(context, listen: false)
+                        .deleteProduct(id);
+                    Navigator.of(ctx).pop(true);
+                  } catch (error) {
+                    Navigator.of(ctx).pop(true);
+                    scaffoldMessenger.showSnackBar(
+                      SnackBar(
+                        content: Text('$error'),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(
@@ -35,16 +73,7 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () async {
-                try {
-                  await Provider.of<Products>(context, listen: false)
-                      .deleteProduct(id);
-                } catch (error) {
-                  scaffoldMessenger.showSnackBar(
-                    SnackBar(
-                      content: Text('$error'),
-                    ),
-                  );
-                }
+                await showDialogDelete(context, scaffoldMessenger);
               },
               color: Theme.of(context).errorColor,
             ),

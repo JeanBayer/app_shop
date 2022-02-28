@@ -84,7 +84,7 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url =
-          'https://app-shop-1c7f1-default-rtdb.firebaseio.com/products/$id';
+          'https://app-shop-1c7f1-default-rtdb.firebaseio.com/products/$id.json';
       final response = await http.patch(
         Uri.parse(url),
         body: json.encode({
