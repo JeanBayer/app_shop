@@ -9,7 +9,7 @@ import './edit_product_screen.dart';
 class UserProductsScreen extends StatelessWidget {
   static const routeName = '/user-products';
   Future<void> _refreshProducts(BuildContext ctx) async {
-    await Provider.of<Products>(ctx, listen: false).fetchAndSet();
+    await Provider.of<Products>(ctx, listen: false).fetchAndSetProducts();
   }
 
   const UserProductsScreen({Key? key}) : super(key: key);
