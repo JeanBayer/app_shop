@@ -107,6 +107,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         await Provider.of<Products>(context, listen: false)
             .addProduct(_editedProduct);
       } catch (error) {
+        // ignore: prefer_void_to_null
         await showDialog<Null>(
             context: context,
             builder: (ctx) {
