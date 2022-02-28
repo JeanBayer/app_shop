@@ -83,27 +83,22 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      _items[prodIndex] = newProduct;
-      try {
-        final url =
-            'https://app-shop-1c7f1-default-rtdb.firebaseio.com/products/$id.json';
-        await http.patch(
-          Uri.parse(url),
-          body: json.encode({
-            'title': newProduct.title,
-            'description': newProduct.description,
-            'imageUrl': newProduct.imageUrl,
-            'price': newProduct.price,
-          }),
-        );
-        notifyListeners();
-      } catch (error) {
-        print(error);
-        throw error;
+      final url =
+          'https://app-shop-1c7f1-default-rtdb.firebaseio.com/products/$id';
+      final response = await http.patch(
+        Uri.parse(url),
+        body: json.encode({
+          'title': newProduct.title,
+          'description': newProduct.description,
+          'imageUrl': newProduct.imageUrl,
+          'price': newProduct.price,
+        }),
+      );
+      if (response.statusCode >= 400) {
+        throw HttpException("Error");
       }
-    } else {
-      // ignore: avoid_print
-      print('...');
+      _items[prodIndex] = newProduct;
+      notifyListeners();
     }
   }
 
@@ -114,7 +109,7 @@ class Products with ChangeNotifier {
     notifyListeners();
 
     final url =
-        'https://app-shop-1c7f1-default-rtdb.firebaseio.com/products/$id';
+        'https://app-shop-1c7f1-default-rtdb.firebaseio.com/products/$id.json';
     final response = await http.delete(Uri.parse(url));
     if (response.statusCode >= 400) {
       _items.insert(itemIndex, itemSave);
