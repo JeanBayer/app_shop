@@ -1,8 +1,9 @@
-// ignore_for_file: body_might_complete_normally_nullable, sized_box_for_whitespace
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
 
 // ignore: constant_identifier_names
 enum AuthMode { Signup, Login }
@@ -35,7 +36,7 @@ class AuthScreen extends StatelessWidget {
             ),
           ),
           SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               height: deviceSize.height,
               width: deviceSize.width,
               child: Column(
@@ -106,7 +107,7 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
       return;
@@ -116,9 +117,11 @@ class _AuthCardState extends State<AuthCard> {
       _isLoading = true;
     });
     if (_authMode == AuthMode.Login) {
-      // Log user in
+      await Provider.of<Auth>(context, listen: false)
+          .login(_authData['email']!, _authData['password']!);
     } else {
-      // Sign user up
+      await Provider.of<Auth>(context, listen: false)
+          .signup(_authData['email']!, _authData['password']!);
     }
     setState(() {
       _isLoading = false;
