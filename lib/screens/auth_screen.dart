@@ -112,11 +112,11 @@ class _AuthCardState extends State<AuthCard> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-            title: Text('An Error Occurred!'),
+            title: const Text('An Error Occurred!'),
             content: Text(message),
             actions: <Widget>[
-              FlatButton(
-                child: Text('Okay'),
+              ElevatedButton(
+                child: const Text('Okay'),
                 onPressed: () {
                   Navigator.of(ctx).pop();
                 },
