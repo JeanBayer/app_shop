@@ -8,9 +8,9 @@ import './product.dart';
 class Products with ChangeNotifier {
   List<Product>? _items = [];
   final String? authToken;
+  final String? userId;
 
-
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userId, this._items);
 
   List<Product> get items {
     return [..._items!];
@@ -25,7 +25,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url =
+    var url =
         'https://app-shop-1c7f1-default-rtdb.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.get(Uri.parse(url));
@@ -34,17 +34,23 @@ class Products with ChangeNotifier {
       if (extractedData == null) {
         return;
       }
+      url =
+          'https://app-shop-1c7f1-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
+      final favoriteResponse = await http.get(Uri.parse(url));
+      final favoriteData = jsonDecode(favoriteResponse.body);
       final List<Product> loadedProducts = [];
       extractedData.forEach(
         (prodId, prodData) {
           loadedProducts.add(
             Product(
-                id: prodId,
-                title: prodData['title'],
-                description: prodData['description'],
-                price: prodData['price'],
-                imageUrl: prodData['imageUrl'],
-                isFavorite: prodData['isFavorite']),
+              id: prodId,
+              title: prodData['title'],
+              description: prodData['description'],
+              price: prodData['price'],
+              imageUrl: prodData['imageUrl'],
+              isFavorite:
+                  favoriteData == null ? false : favoriteData[prodId] ?? false,
+            ),
           );
         },
       );
@@ -67,7 +73,6 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
-          'isFavorite': product.isFavorite,
         }),
       );
       final newProduct = Product(

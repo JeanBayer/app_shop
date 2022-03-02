@@ -23,6 +23,10 @@ class Auth with ChangeNotifier {
     return null;
   }
 
+  String? get userId {
+    return _userId;
+  }
+
   Future<void> authentication(
       String email, String password, String segmentUrl) async {
     final url = Uri.parse(
@@ -51,11 +55,9 @@ class Auth with ChangeNotifier {
         ),
       );
       notifyListeners();
-      
     } catch (error) {
       throw error;
     }
-
   }
 
   Future<void> login(String email, String password) async {
