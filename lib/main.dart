@@ -13,6 +13,7 @@ import './screens/user_products_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
+import './helpers/custom_route.dart';
 
 void main() {
   runApp(const MyApp());
@@ -60,6 +61,12 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSwatch().copyWith(
                   secondary: Colors.deepOrange, primary: Colors.purple),
               fontFamily: "Lato",
+            pageTransitionsTheme: PageTransitionsTheme(
+                  builders: {
+                    TargetPlatform.android: CustomPageTransitionBuilder(),
+                    TargetPlatform.iOS: CustomPageTransitionBuilder(),
+                  },
+                ),
             ),
             home: auth.isAuth
                   ? const ProductsOverviewScreen()
