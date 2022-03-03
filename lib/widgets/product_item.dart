@@ -26,8 +26,9 @@ class ProductItem extends StatelessWidget {
               arguments: product.id,
             );
           },
-          child: Image.network(
-            product.imageUrl,
+          child: FadeInImage(
+            placeholder: const AssetImage('assets/images/imageb-removebg.png'),
+            image: NetworkImage(product.imageUrl),
             fit: BoxFit.cover,
           ),
         ),
@@ -44,7 +45,8 @@ class ProductItem extends StatelessWidget {
                 icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_outline,
                 ),
-                onPressed: () => product.toggleFavoriteStatus(authData.token, authData.userId),
+                onPressed: () => product.toggleFavoriteStatus(
+                    authData.token, authData.userId),
               );
             },
           ),
